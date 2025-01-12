@@ -58,7 +58,7 @@ public class ScannerTest {
      * @param source Scanner to process
      * @return total of positive integers entered from keyboard
      */
-    public static int readNumbers(final Scanner keyboard) {
+    public static int readNumbers(final Scanner source) {
 	int total = 0;
 
 	// your code here
@@ -68,11 +68,11 @@ public class ScannerTest {
 	// loop through the integers of the file
 	while (true) {
             // Check if there is an integer input available
-            if (keyboard.hasNextInt()) {
-                int number = keyboard.nextInt(); // Read the integer
+            if (source.hasNextInt()) {
+                int number = source.nextInt(); // Read the integer
                 total += number; // Add the integer to the total
             } else {
-                String input = keyboard.next(); // Read the next token as a string
+                String input = source.next(); // Read the next token as a string
 
                 // Check if the input is 'q'
                 if (input.equalsIgnoreCase("q")) {
