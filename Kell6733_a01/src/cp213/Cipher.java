@@ -1,7 +1,7 @@
 package cp213;
 
 /**
- * @author Your name and id here
+ * @author Spencer Kelly, 169066733
  * @version 2025-01-05
  */
 public class Cipher {
@@ -22,8 +22,20 @@ public class Cipher {
     public static String shift(final String s, final int n) {
 
 	// your code here
+	StringBuilder result = new StringBuilder();
+	int shift = n % ALPHA_LENGTH;
 
-	return null;
+	for (char c : s.toUpperCase().toCharArray()) {
+	    if (Character.isLetter(c)) {
+	        int originalPosition = ALPHA.indexOf(c);
+	        int newPosition = (originalPosition + shift + ALPHA_LENGTH) % ALPHA_LENGTH;
+	        result.append(ALPHA.charAt(newPosition));
+	    } else {
+	        result.append(c);
+	    }
+	}
+
+	return result.toString();
     }
 
     /**
@@ -46,8 +58,18 @@ public class Cipher {
     public static String substitute(final String s, final String ciphertext) {
 
 	// your code here
+	StringBuilder result = new StringBuilder();
+	String upperS = s.toUpperCase();
 
-	return null;
+	for (char c : upperS.toCharArray()) {
+	    if (Character.isLetter(c)) {
+	        int originalPosition = ALPHA.indexOf(c);
+	        result.append(ciphertext.charAt(originalPosition));
+	    } else {
+	        result.append(c);
+	    }
+	}
+	return result.toString();
     }
 
 }

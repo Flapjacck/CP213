@@ -1,7 +1,7 @@
 package cp213;
 
 /**
- * @author Your name and id here
+ * @author Spencer Kelly, 169066733
  * @version 2025-01-05
  */
 public class LeapYear {
@@ -26,8 +26,15 @@ public class LeapYear {
     public static boolean isLeapYear(final int year) {
 
 	// your code here
-
-	return false;
+	if (year % 4 == 0) {
+	    if (year % 100 == 0) {
+		return year % 400 == 0;
+	    } else {
+		return true;
+	    }
+	} else {
+	    return false;
+	}
     }
 
 }

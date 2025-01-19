@@ -1,7 +1,7 @@
 package cp213;
 
 /**
- * @author Your name and id here
+ * @author Spencer Kelly, 169066733
  * @version 2025-01-05
  */
 public class Numbers {
