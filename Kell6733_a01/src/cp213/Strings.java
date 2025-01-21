@@ -19,8 +19,17 @@ public class Strings {
     public static boolean isPalindrome(final String string) {
 
 	// your code here
+	StringBuilder filtered = new StringBuilder();
+	for (int i = 0; i < string.length(); i++) {
+	    if (Character.isLetter(string.charAt(i))) {
+		filtered.append(string.charAt(i));
+	    }
+	}
+	String filteredString = filtered.toString();
+	String reversed = new StringBuilder(filteredString).reverse().toString();
+	
 
-	return false;
+	return filteredString.equalsIgnoreCase(reversed);
     }
 
     /**
@@ -34,8 +43,19 @@ public class Strings {
     public static boolean isValid(final String name) {
 
 	// your code here
-
-	return false;
+	if (name == null || name.isEmpty() || name.equals("_")) {
+	    return false;
+	}
+	if (!Character.isLetter(name.charAt(0)) && name.charAt(0) != '_') {
+	    return false;
+	}
+	for (char c : name.toCharArray()) {
+	    if (!Character.isLetterOrDigit(c) && c != '_') {
+                return false;
+	    }
+	}
+	    
+	return true;
     }
 
     /**
@@ -56,8 +76,35 @@ public class Strings {
     public static String pigLatin(String word) {
 
 	// your code here
+	if (word == null || word.isEmpty()) {
+            return word;
+        }
 
-	return null;
+        boolean isFirstUpper = Character.isUpperCase(word.charAt(0));
+        word = word.toLowerCase();
+
+        if (VOWELS.indexOf(word.charAt(0)) != -1) {
+            word = word + "way";
+        } else {
+            int vowelIndex = -1;
+            for (int i = 0; i < word.length(); i++) {
+                if (VOWELS.indexOf(word.charAt(i)) != -1) {
+                    vowelIndex = i;
+                    break;
+                }
+            }
+            if (vowelIndex == -1) {
+                word = word + "ay";
+            } else {
+                word = word.substring(vowelIndex) + word.substring(0, vowelIndex) + "ay";
+            }
+        }
+
+        if (isFirstUpper) {
+            word = Character.toUpperCase(word.charAt(0)) + word.substring(1);
+        }
+
+        return word;
     }
 
 }
