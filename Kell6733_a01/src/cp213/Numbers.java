@@ -18,8 +18,19 @@ public class Numbers {
     public static double closest(final double target, final double v1, final double v2) {
 
 	// your code here
-
-	return 0.0;
+	double result = 0.0;
+	double diff1 = Math.abs(target - v1);
+	double diff2 = Math.abs(target - v2);
+	
+	if (diff1 < diff2) {
+	    result = v1;
+	} else if (diff1 > diff2) {
+	    result = v2;
+	} else {
+	    result = v1;
+	}
+	
+	return result;
     }
 
     /**
@@ -33,8 +44,18 @@ public class Numbers {
     public static boolean isPrime(final int n) {
 
 	// your code here
+	boolean result = true;
+	if (n < 2) {
+	    result = false;
+	} else {
+	    for (int i = 2; i < n; i++) {
+		if (n % i == 0) {
+		    result = false;
+		}
+	    }
+	}
 
-	return false;
+	return result;
     }
 
     /**
@@ -49,8 +70,13 @@ public class Numbers {
     public static double sumPartialHarmonic(final int n) {
 
 	// your code here
+	double result = 0.0;
+	
+	for (int i = 1; i <= n; i++) {
+	    result += 1.0 / i;
+	}
 
-	return 0.0;
+	return result;
     }
 
 }
