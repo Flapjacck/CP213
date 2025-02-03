@@ -16,7 +16,7 @@ public class Main {
 	String surname = "Brown";
 	String forename = "David";
 	LocalDate birthDate =  LocalDate.parse("1962-10-25");
-	Student student = new Student( /* parameters here */);
+	Student student = new Student(id, surname, forename, birthDate);
 	System.out.println("New Student:");
 	System.out.println(student);
 	System.out.println(line);

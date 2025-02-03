@@ -64,7 +64,13 @@ public class Student implements Comparable<Student> {
 	int result = 0;
 
 	// your code here
-	
+	if (result == 0) {
+	    result = this.forename.compareTo(target.forename);
+	}
+
+	if (result == 0) {
+	    result = Integer.compare(this.id, target.id);
+	}
 
 	return result;
     }
