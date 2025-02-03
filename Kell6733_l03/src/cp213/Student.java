@@ -5,7 +5,7 @@ import java.time.LocalDate;
 /**
  * Student class definition.
  *
- * @author your name here
+ * @author Spencer Kelly
  * @version 2022-01-17
  */
 public class Student implements Comparable<Student> {
@@ -24,14 +24,14 @@ public class Student implements Comparable<Student> {
      * @param forename  name of forename
      * @param birthDate birthDate in 'YYYY-MM-DD' format
      */
-    public Student( /* parameters here */ ) {
+    public Student(int id, String surname, String forename, LocalDate birthDate) {
 
 	// assign attributes here
 	
 	this.id = id;
 	this.surname = surname;
 	this.forename = forename;
-	this.birthDate = birth
+	this.birthDate = birthDate;
 
 	return;
     }
@@ -46,6 +46,10 @@ public class Student implements Comparable<Student> {
 	String string = "";
 
 	// your code here
+	
+	string = "Name:    " + surname + ", " + forename + "\n" + "ID:      " + id + "\n" + "Birthdate: "
+		+ birthDate;
+
 
 	return string;
     }
@@ -60,6 +64,7 @@ public class Student implements Comparable<Student> {
 	int result = 0;
 
 	// your code here
+	
 
 	return result;
     }
