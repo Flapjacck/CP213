@@ -77,6 +77,78 @@ public class Student implements Comparable<Student> {
 
 
     // getters and setters defined here
+    
+    /**
+     * Gets the student ID.
+     * 
+     * @return the student ID
+     */
+    public int getId() {
+	return id;
+    }
+
+    /**
+     * Sets the student ID.
+     * 
+     * @param id the student ID to set
+     */
+    public void setId(int id) {
+	this.id = id;
+    }
+
+    /**
+     * Gets the student's surname.
+     * 
+     * @return the surname
+     */
+    public String getSurname() {
+	return surname;
+    }
+
+    /**
+     * Sets the student's surname.
+     * 
+     * @param surname the surname to set
+     */
+    public void setSurname(String surname) {
+	this.surname = surname;
+    }
+
+    /**
+     * Gets the student's forename.
+     * 
+     * @return the forename
+     */
+    public String getForename() {
+	return forename;
+    }
+
+    /**
+     * Sets the student's forename.
+     * 
+     * @param forename the forename to set
+     */
+    public void setForename(String forename) {
+	this.forename = forename;
+    }
+
+    /**
+     * Gets the student's birthdate.
+     * 
+     * @return the birthdate
+     */
+    public LocalDate getBirthDate() {
+	return birthDate;
+    }
+
+    /**
+     * Sets the student's birthdate.
+     * 
+     * @param birthDate the birthdate to set
+     */
+    public void setBirthDate(LocalDate birthDate) {
+	this.birthDate = birthDate;
+    }
 
 
 }
