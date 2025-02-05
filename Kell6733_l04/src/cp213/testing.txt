@@ -1,0 +1,33 @@
+"""
+-------------------------------------------------------
+testing.txt
+CP213 Documentation Lab Testing
+-------------------------------------------------------
+Author:  Spencer Kelly
+ID:      169066733
+Email:   Kell6733@mylaurier.ca
+Version: 2025-02-05
+-------------------------------------------------------
+"""
+Task 1
+Values in first:
+1
+3
+5
+7
+9
+Values in second:
+1
+3
+5
+7
+9
+true
+Task 2
+true
+Task 3
+false
+Task 4
+true
+Task 5
+[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
