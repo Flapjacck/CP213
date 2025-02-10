@@ -23,8 +23,14 @@ public class MovieUtilities {
     public static int[] genreCounts(final ArrayList<Movie> movies) {
 
 	// your code here
+	
+	int[] genreCounts = new int[Movie.GENRES.length];
+	
+	for (Movie movie : movies) {
+	    genreCounts[movie.getGenre()]++;
+	}
 
-	return new int[0];
+	return genreCounts;
     }
 
     /**
@@ -50,8 +56,24 @@ public class MovieUtilities {
     public static Movie getMovie(final Scanner keyboard) {
 
 	// your code here
+	System.out.print("Title: ");
+	String title = keyboard.nextLine();
 
-	return null;
+	System.out.print("Year: ");
+	int year = keyboard.nextInt();
+	keyboard.nextLine();
+
+	System.out.print("Director: ");
+	String director = keyboard.nextLine();
+
+	System.out.print("Rating: ");
+	Double rating = keyboard.nextDouble();
+
+	System.out.println(Movie.genresMenu());
+	System.out.println("Enter a genre number: ");
+	int genre = keyboard.nextInt();
+
+	return new Movie(title, year, director, rating, genre);
     }
 
     /**
@@ -64,8 +86,14 @@ public class MovieUtilities {
     public static ArrayList<Movie> getByGenre(final ArrayList<Movie> movies, final int genre) {
 
 	// your code here
-
-	return null;
+	ArrayList<Movie> moviesByGenre = new ArrayList<Movie>();
+	
+	for (Movie movie : movies) {
+	    if (movie.getGenre() == genre) {
+		moviesByGenre.add(movie);
+	    }
+	}
+	return moviesByGenre;
     }
 
     /**
@@ -78,8 +106,14 @@ public class MovieUtilities {
     public static ArrayList<Movie> getByRating(final ArrayList<Movie> movies, final double rating) {
 
 	// your code here
-
-	return null;
+	ArrayList<Movie> moviesByRating = new ArrayList<Movie>();
+	
+	for (Movie movie : movies) {
+	    if (movie.getRating() >= rating) {
+		moviesByRating.add(movie);
+	    }
+	}
+	return moviesByRating;
     }
 
     /**
@@ -92,8 +126,14 @@ public class MovieUtilities {
     public static ArrayList<Movie> getByYear(final ArrayList<Movie> movies, final int year) {
 
 	// your code here
-
-	return null;
+	ArrayList<Movie> moviesByYear = new ArrayList<Movie>();
+	
+	for (Movie movie : movies) {
+	    if (movie.getYear() == year) {
+		moviesByYear.add(movie);
+	    }
+	}
+	return moviesByYear;
     }
 
     /**
@@ -107,8 +147,16 @@ public class MovieUtilities {
     public static int readGenre(final Scanner keyboard) {
 
 	// your code here
+	System.out.println(Movie.genresMenu());
+	System.out.print("Enter a genre number: ");
+	int genre = keyboard.nextInt();
 
-	return -1;
+	while (genre < 0 || genre >= Movie.GENRES.length) {
+	    System.out.print("Invalid genre. Enter a valid genre number: ");
+	    genre = keyboard.nextInt();
+	}
+
+	return genre;
     }
 
     /**
@@ -121,8 +169,16 @@ public class MovieUtilities {
     public static Movie readMovie(final String line) {
 
 	// your code here
+	String[] movieDescription = line.split("\\|");
 
-	return null;
+	String title = movieDescription[0];
+	int year = Integer.parseInt(movieDescription[1]);
+	String director = movieDescription[2];
+	double rating = Double.parseDouble(movieDescription[3]);
+	int genre = Integer.parseInt(movieDescription[4]);
+
+	return new Movie(title, year, director, rating, genre);
+
     }
 
     /**
@@ -135,8 +191,14 @@ public class MovieUtilities {
     public static ArrayList<Movie> readMovies(final Scanner fileIn) {
 
 	// your code here
+	ArrayList<Movie> movies = new ArrayList<>();
 
-	return null;
+	while (fileIn.hasNextLine()) {
+	    String line = fileIn.nextLine();
+	    movies.add(readMovie(line));
+	}
+
+	return movies;
     }
 
     /**
@@ -148,6 +210,9 @@ public class MovieUtilities {
     public static void writeMovies(final ArrayList<Movie> movies, PrintStream ps) {
 
 	// your code here
+	for (Movie movie : movies) {
+	    movie.write(ps);
+	}
 
 	return;
     }
