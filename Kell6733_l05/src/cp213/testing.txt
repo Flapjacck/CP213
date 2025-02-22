@@ -1,0 +1,51 @@
+"""
+-------------------------------------------------------
+testing.txt
+CP213 Documentation Lab Testing
+-------------------------------------------------------
+Author:  Spencer Kelly
+ID:      169066733
+Email:   Kell6733@mylaurier.ca
+Version: 2025-02-22
+-------------------------------------------------------
+"""
+Print Example 1 - People:
+
+Snord, Cranston
+
+Sharma, Priyanka: 7384737
+
+Hakim, Abdul
+Department: History
+
+Rodrigues, Estevan
+Department: Philosophy
+
+----------------------------------------
+Print Example 2 - Sorted People:
+
+Hakim, Abdul
+Department: History
+
+Rodrigues, Estevan
+Department: Philosophy
+
+Sharma, Priyanka: 7384737
+
+Snord, Cranston
+
+
+========================================
+Task 1 - Add CAS:
+
+Hakim, Abdul
+Department: History
+
+Rodrigues, Estevan
+Department: Philosophy
+
+Sharma, Priyanka: 7384737
+
+Snord, Cranston
+
+
