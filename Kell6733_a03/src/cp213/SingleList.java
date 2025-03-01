@@ -70,6 +70,29 @@ public class SingleList<T extends Comparable<T>> extends SingleLink<T> {
     public void clean() {
 
 	// your code here
+	if (this.front == null) {
+	    return;
+	}
+	
+	SingleNode<T> current = this.front;
+	SingleNode<T> previous = null;
+	SingleNode<T> next = null;
+	
+	while (current != null) {
+	    next = current.getNext();
+	    previous = current;
+	    while (next != null) {
+		if (current.getEntity().compareTo(next.getEntity()) == 0) {
+		    previous.setNext(next.getNext());
+		    this.length--;
+		} else {
+		    previous = next;
+		}
+		next = next.getNext();
+	    }
+	    current = current.getNext();
+	}
+	
 
 	return;
     }
@@ -85,6 +108,18 @@ public class SingleList<T extends Comparable<T>> extends SingleLink<T> {
     public void combine(final SingleList<T> left, final SingleList<T> right) {
 
 	// your code here
+	while (left.getLength() != 0 && right.getLength() != 0) {
+	    this.moveFrontToRear(left);
+	    this.moveFrontToRear(right);
+	}
+
+	while (left.getLength() != 0) {
+	    this.moveFrontToRear(left);
+	}
+
+	while (right.getLength() != 0) {
+	    this.moveFrontToRear(right);
+	}
 
 	return;
     }
@@ -99,7 +134,7 @@ public class SingleList<T extends Comparable<T>> extends SingleLink<T> {
 
 	// your code here
 
-	return false;
+	return this.linearSearch(key) != null;
     }
 
     /**
@@ -111,8 +146,17 @@ public class SingleList<T extends Comparable<T>> extends SingleLink<T> {
     public int count(final T key) {
 
 	// your code here
+	int count = 0;
+	SingleNode<T> current = this.front;
+	
+	while (current != null) {
+	    if (current.getEntity().compareTo(key) == 0) {
+		count++;
+	    }
+	    current = current.getNext();
+	}
 
-	return 0;
+	return count;
     }
 
     /**
@@ -124,8 +168,17 @@ public class SingleList<T extends Comparable<T>> extends SingleLink<T> {
     public T find(final T key) {
 
 	// your code here
+	SingleNode<T> node = this.linearSearch(key);
+	T value;
 
-	return null;
+	if (node == null) {
+	    value = null;
+
+	} else {
+	    value = node.getNext().getEntity();
+	}
+
+	return value;
     }
 
     /**
@@ -138,8 +191,19 @@ public class SingleList<T extends Comparable<T>> extends SingleLink<T> {
     public T get(final int n) throws ArrayIndexOutOfBoundsException {
 
 	// your code here
+	SingleNode<T> node = this.front;
 
-	return null;
+	if (n < 0 || n > this.getLength() || node == null) {
+	    throw new ArrayIndexOutOfBoundsException(n + " is not a valid index");
+	}
+
+	int i = n;
+	while (i > 0) {
+	    node = node.getNext();
+	    i--;
+	}
+
+	return node.getEntity();
     }
 
     /**
@@ -152,8 +216,23 @@ public class SingleList<T extends Comparable<T>> extends SingleLink<T> {
     public boolean equals(final SingleList<T> source) {
 
 	// your code here
+	SingleNode<T> currentNode = front;
+	SingleNode<T> sourceCurrentNode = source.front;
 
-	return false;
+	while (currentNode != null && sourceCurrentNode != null) {
+	    if (!(currentNode.getEntity().compareTo(sourceCurrentNode.getEntity()) == 0)) {
+		return false;
+	    }
+
+	    currentNode = currentNode.getNext();
+	    sourceCurrentNode = sourceCurrentNode.getNext();
+	}
+
+	if (currentNode != null || sourceCurrentNode != null) {
+	    return false;
+	}
+
+	return true;
     }
 
     /**
@@ -165,8 +244,18 @@ public class SingleList<T extends Comparable<T>> extends SingleLink<T> {
     public int index(final T key) {
 
 	// your code here
+	SingleNode<T> curr = this.front;
+	int index = 0;
+	while (curr != null) {
+	    if (curr.getEntity().compareTo(key) == 0) {
+		return index;
+	    } else {
+		index += 1;
+		curr = curr.getNext();
+	    }
+	}
 
-	return 0;
+	return -1;
     }
 
     /**
@@ -179,6 +268,22 @@ public class SingleList<T extends Comparable<T>> extends SingleLink<T> {
     public void insert(int i, final T entity) {
 
 	// your code here
+	SingleNode<T> newNode = new SingleNode<T>(entity, null);
+	if (i >= this.length) {
+	    this.rear.setNext(newNode);
+	    this.rear = newNode;
+	} else {
+	    SingleNode<T> curr = this.front;
+	    SingleNode<T> prev = null;
+	    for (int j = 0; j < i; j++) {
+		prev = curr;
+		curr = curr.getNext();
+	    }
+	    prev.setNext(newNode);
+	    newNode.setNext(curr);
+
+	}
+	this.length += 1;
 
 	return;
     }
@@ -195,6 +300,15 @@ public class SingleList<T extends Comparable<T>> extends SingleLink<T> {
     public void intersection(final SingleList<T> left, final SingleList<T> right) {
 
 	// your code here
+	SingleNode<T> curr = left.front;
+
+	while (curr != null) {
+	    if (!this.contains(curr.getEntity()) && right.contains(curr.getEntity())) {
+		this.append(curr.getEntity());
+	    }
+
+	    curr = curr.getNext();
+	}
 
 	return;
     }
@@ -207,8 +321,16 @@ public class SingleList<T extends Comparable<T>> extends SingleLink<T> {
     public T max() {
 
 	// your code here
+	SingleNode<T> curr = this.front;
+	T max = curr.getEntity();
+	while (curr != null) {
+	    if (curr.getEntity().compareTo(max) > 0) {
+		max = curr.getEntity();
+	    }
+	    curr = curr.getNext();
+	}
 
-	return null;
+	return max;
     }
 
     /**
@@ -219,8 +341,16 @@ public class SingleList<T extends Comparable<T>> extends SingleLink<T> {
     public T min() {
 
 	// your code here
+	SingleNode<T> curr = this.front;
+	T min = curr.getEntity();
+	while (curr != null) {
+	    if (curr.getEntity().compareTo(min) < 0) {
+		min = curr.getEntity();
+	    }
+	    curr = curr.getNext();
+	}
 
-	return null;
+	return min;
     }
 
     /**
@@ -231,6 +361,14 @@ public class SingleList<T extends Comparable<T>> extends SingleLink<T> {
     public void prepend(final T entity) {
 
 	// your code here
+	SingleNode<T> newNode = new SingleNode<T>(entity, null);
+	if (this.front == null) {
+	    this.rear = newNode;
+	} else {
+	    newNode.setNext(this.front);
+	}
+	this.front = newNode;
+	this.length += 1;
 
 	return;
     }
@@ -244,8 +382,23 @@ public class SingleList<T extends Comparable<T>> extends SingleLink<T> {
     public T remove(final T key) {
 
 	// your code here
+	// Find the node with the key and remove it
+        SingleNode<T> previous = this.linearSearch(key);
+        T value = null;
 
-	return null;
+        if (previous == null) {
+            if (this.front != null && this.front.getEntity().compareTo(key) == 0) {
+                value = this.front.getEntity();
+                this.front = this.front.getNext();
+                this.length--;
+            }
+        } else if (previous.getNext() != null) {
+            value = previous.getNext().getEntity();
+            previous.setNext(previous.getNext().getNext());
+            this.length--;
+        }
+
+        return value;
     }
 
     /**
@@ -256,8 +409,20 @@ public class SingleList<T extends Comparable<T>> extends SingleLink<T> {
     public T removeFront() {
 
 	// your code here
+	// Remove the front node and return its value
+        if (this.front == null) {
+            return null;
+        }
 
-	return null;
+        T value = this.front.getEntity();
+        this.front = this.front.getNext();
+        this.length--;
+
+        if (this.front == null) {
+            this.rear = null;
+        }
+
+        return value;
     }
 
     /**
@@ -268,8 +433,10 @@ public class SingleList<T extends Comparable<T>> extends SingleLink<T> {
     public void removeMany(final T key) {
 
 	// your code here
-
-	return;
+	// Remove all nodes with the key
+        while (this.contains(key)) {
+            this.remove(key);
+        }
     }
 
     /**
@@ -278,8 +445,19 @@ public class SingleList<T extends Comparable<T>> extends SingleLink<T> {
     public void reverse() {
 
 	// your code here
+	SingleNode<T> previous = null;
+        SingleNode<T> current = this.front;
+        SingleNode<T> next = null;
+        this.rear = this.front;
 
-	return;
+        while (current != null) {
+            next = current.getNext();
+            current.setNext(previous);
+            previous = current;
+            current = next;
+        }
+
+        this.front = previous;
     }
 
     /**
@@ -296,6 +474,19 @@ public class SingleList<T extends Comparable<T>> extends SingleLink<T> {
     public void split(final SingleList<T> left, final SingleList<T> right) {
 
 	// your code here
+	// Split the list into left and right
+	int rightLength = this.getLength() / 2;
+	int leftLength = this.getLength() - rightLength;
+
+	while (leftLength > 0) {
+	    left.moveFrontToRear(this);
+	    leftLength--;
+	}
+
+	while (rightLength > 0) {
+	    right.moveFrontToRear(this);
+	    rightLength--;
+	}
 
 	return;
     }
@@ -313,7 +504,17 @@ public class SingleList<T extends Comparable<T>> extends SingleLink<T> {
 
 	// your code here
 
-	return;
+	// Split the list alternately into left and right
+        boolean moveToLeft = true;
+
+        while (this.length > 0) {
+            if (moveToLeft) {
+                left.moveFrontToRear(this);
+            } else {
+                right.moveFrontToRear(this);
+            }
+            moveToLeft = !moveToLeft;
+        }
     }
 
     /**
@@ -327,7 +528,22 @@ public class SingleList<T extends Comparable<T>> extends SingleLink<T> {
     public void union(final SingleList<T> left, final SingleList<T> right) {
 
 	// your code here
+	SingleNode<T> current = left.front;
 
-	return;
+        while (current != null) {
+            if (!this.contains(current.getEntity())) {
+                this.append(current.getEntity());
+            }
+            current = current.getNext();
+        }
+
+        current = right.front;
+
+        while (current != null) {
+            if (!this.contains(current.getEntity())) {
+                this.append(current.getEntity());
+            }
+            current = current.getNext();
+        }
     }
 }
