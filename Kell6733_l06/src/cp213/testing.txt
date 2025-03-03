@@ -1,0 +1,45 @@
+"""
+-------------------------------------------------------
+testing.txt
+CP213 Documentation Lab Testing
+-------------------------------------------------------
+Author:  Spencer Kelly
+ID:      169066733
+Email:   Kell6733@mylaurier.ca
+Version: 2025-03-03
+-------------------------------------------------------
+"""
+Test scannerTest
+
+Enter a valid integer ("Quit" to stop): 
+1
+Enter a valid integer ("Quit" to stop): 
+2
+Enter a valid integer ("Quit" to stop): 
+3
+Enter a valid integer ("Quit" to stop): 
+4
+Enter a valid integer ("Quit" to stop): 
+5
+Enter a valid integer ("Quit" to stop): 
+3
+Enter a valid integer ("Quit" to stop): 
+2
+Enter a valid integer ("Quit" to stop): 
+Quit
+Enter a valid integer!!!
+Total: 20
+
+Test stringPrinter
+*****
+
+getMessage:
+Enter a positive integer for n!!!
+
+toString:
+java.lang.IllegalArgumentException: Enter a positive integer for n!!!
+
+printStackTrace:
+java.lang.IllegalArgumentException: Enter a positive integer for n!!!
+	at cp213.Main.stringPrinter(Main.java:83)
+	at cp213.Main.main(Main.java:26)
