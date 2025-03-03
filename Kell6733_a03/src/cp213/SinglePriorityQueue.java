@@ -33,8 +33,18 @@ public class SinglePriorityQueue<T extends Comparable<T>> extends SingleLink<T> 
 	assert this.front == null : "May combine into an empty Priority Queue only";
 
 	// your code here
-
-	return;
+	// Combine nodes from left and right queues in priority order
+        while (!left.isEmpty() || !right.isEmpty()) {
+            if (left.isEmpty()) {
+                this.moveFrontToRear(right);
+            } else if (right.isEmpty()) {
+                this.moveFrontToRear(left);
+            } else if (left.peek().compareTo(right.peek()) <= 0) {
+                this.moveFrontToRear(left);
+            } else {
+                this.moveFrontToRear(right);
+            }
+        }
     }
 
     /**
@@ -59,6 +69,23 @@ public class SinglePriorityQueue<T extends Comparable<T>> extends SingleLink<T> 
     public void insert(final T entity) {
 
 	// your code here
+	SingleNode<T> prev = null;
+	SingleNode<T> curr = this.front;
+
+	while (curr != null && curr.getEntity().compareTo(entity) <= 0) {
+	    prev = curr;
+	    curr = curr.getNext();
+	}
+
+	SingleNode<T> node = new SingleNode<>(entity, curr);
+
+	if (prev == null) {
+	    this.front = node;
+	} else {
+	    prev.setNext(node);
+	}
+
+	this.length++;
 
 	return;
     }
@@ -72,8 +99,21 @@ public class SinglePriorityQueue<T extends Comparable<T>> extends SingleLink<T> 
     public T remove() {
 
 	// your code here
+	if (this.front == null) {
+            return null;
+        }
 
-	return null;
+        // Remove the front node and return its value
+        T value = this.front.getEntity();
+        this.front = this.front.getNext();
+        this.length--;
+
+        // Update the rear if the queue is now empty
+        if (this.front == null) {
+            this.rear = null;
+        }
+
+        return value;
     }
 
     /**
@@ -95,7 +135,13 @@ public class SinglePriorityQueue<T extends Comparable<T>> extends SingleLink<T> 
     public void splitByKey(final T key, final SinglePriorityQueue<T> higher, final SinglePriorityQueue<T> lower) {
 
 	// your code here
-
-	return;
+	// Split nodes into higher and lower queues based on the key
+        while (this.front != null) {
+            if (this.front.getEntity().compareTo(key) > 0) {
+                higher.moveFrontToRear(this);
+            } else {
+                lower.moveFrontToRear(this);
+            }
+        }
     }
 }

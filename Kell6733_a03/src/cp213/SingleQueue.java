@@ -32,8 +32,18 @@ public class SingleQueue<T> extends SingleLink<T> {
     public void combine(final SingleQueue<T> left, final SingleQueue<T> right) {
 
 	// your code here
+	// Ensure the current queue is empty
+        assert this.front == null : "Error: current queue is not empty";
 
-	return;
+        // Combine nodes from left and right queues alternately
+        while (!left.isEmpty() || !right.isEmpty()) {
+            if (!left.isEmpty()) {
+                this.moveFrontToRear(left);
+            }
+            if (!right.isEmpty()) {
+                this.moveFrontToRear(right);
+            }
+        }
     }
 
     /**
@@ -44,8 +54,19 @@ public class SingleQueue<T> extends SingleLink<T> {
     public void insert(final T entity) {
 
 	// your code here
+	// Create a new node with the entity
+        SingleNode<T> newNode = new SingleNode<>(entity, null);
 
-	return;
+        // Insert the new node at the rear of the queue
+        if (this.rear == null) {
+            this.front = newNode;
+        } else {
+            this.rear.setNext(newNode);
+        }
+        this.rear = newNode;
+
+        // Increment the length of the queue
+        this.length++;
     }
 
     /**
@@ -58,8 +79,22 @@ public class SingleQueue<T> extends SingleLink<T> {
     public T remove() {
 
 	// your code here
+	// Check if the queue is empty
+        if (this.front == null) {
+            return null;
+        }
 
-	return null;
+        // Remove the front node and return its value
+        T value = this.front.getEntity();
+        this.front = this.front.getNext();
+        this.length--;
+
+        // Update the rear if the queue is now empty
+        if (this.front == null) {
+            this.rear = null;
+        }
+
+        return value;
     }
 
     /**
@@ -77,7 +112,16 @@ public class SingleQueue<T> extends SingleLink<T> {
     public void splitAlternate(final SingleQueue<T> left, final SingleQueue<T> right) {
 
 	// your code here
+	// Split nodes alternately into left and right queues
+        boolean moveToLeft = true;
 
-	return;
+        while (this.front != null) {
+            if (moveToLeft) {
+                left.moveFrontToRear(this);
+            } else {
+                right.moveFrontToRear(this);
+            }
+            moveToLeft = !moveToLeft;
+        }
     }
 }

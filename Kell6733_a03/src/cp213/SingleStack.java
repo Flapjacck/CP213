@@ -33,8 +33,18 @@ public class SingleStack<T> extends SingleLink<T> {
     public void combine(final SingleStack<T> left, final SingleStack<T> right) {
 
 	// your code here
+	// let's make sure this stack is empty first
+        assert this.front == null : "May combine into an empty Stack only";
 
-	return;
+        // Now, let's move nodes from left and right alternately
+        while (!left.isEmpty() || !right.isEmpty()) {
+            if (!left.isEmpty()) {
+                this.moveFrontToFront(left);
+            }
+            if (!right.isEmpty()) {
+                this.moveFrontToFront(right);
+            }
+        }
     }
 
     /**
@@ -47,8 +57,19 @@ public class SingleStack<T> extends SingleLink<T> {
     public T pop() {
 
 	// your code here
+	// If the stack is empty, there's nothing to pop
+        if (this.front == null) {
+            return null;
+        }
 
-	return null;
+        // Get the value of the top node
+        T value = this.front.getEntity();
+        // Move the front to the next node
+        this.front = this.front.getNext();
+        // Decrease the length of the stack
+        this.length--;
+
+        return value;
     }
 
     /**
@@ -59,6 +80,14 @@ public class SingleStack<T> extends SingleLink<T> {
     public void push(final T entity) {
 
 	// your code here
+	// Create a new node with the entity
+        SingleNode<T> newNode = new SingleNode<>(entity, null);
+        // Set the new node's next to the current front
+        newNode.setNext(this.front);
+        // Update the front to the new node
+        this.front = newNode;
+        // Increase the length of the stack
+        this.length++;
 
 	return;
     }
@@ -78,7 +107,16 @@ public class SingleStack<T> extends SingleLink<T> {
     public void splitAlternate(final SingleStack<T> left, final SingleStack<T> right) {
 
 	// your code here
+	// let's alternate nodes between left and right stacks
+        boolean moveToLeft = true;
 
-	return;
+        while (this.front != null) {
+            if (moveToLeft) {
+                left.moveFrontToFront(this);
+            } else {
+                right.moveFrontToFront(this);
+            }
+            moveToLeft = !moveToLeft;
+        }
     }
 }
