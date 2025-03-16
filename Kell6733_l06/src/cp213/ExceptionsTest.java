@@ -3,7 +3,7 @@ package cp213;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
-public class Main {
+public class ExceptionsTest {
 
     /**
      * @param args unused
@@ -80,7 +80,7 @@ public class Main {
 
 	// your code here
 	if (n < 0) {
-	    throw new IllegalArgumentException("Enter a positive integer for n!!!");
+	    throw new IllegalArgumentException("Please Enter a Positive Number!");
 	}
 
 	StringBuilder ans = new StringBuilder();
