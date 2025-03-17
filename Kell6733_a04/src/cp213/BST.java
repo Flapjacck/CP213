@@ -37,8 +37,15 @@ public class BST<T extends Comparable<T>> {
     protected boolean equalsAux(final TreeNode<T> source, final TreeNode<T> target) {
 
 	// your code here
-
-	return false;
+	if (source == null && target == null) {
+            return true; // both are null, so they are equal
+        }
+        if (source == null || target == null) {
+            return false; // one is null while the other is not, so they are not equal
+        }
+        return source.getCountedEntity().compareTo(target.getCountedEntity()) == 0
+                && equalsAux(source.getLeft(), target.getLeft()) // compare left subtrees
+                && equalsAux(source.getRight(), target.getRight()); // compare right subtrees
     }
 
     /**
@@ -86,8 +93,15 @@ public class BST<T extends Comparable<T>> {
     protected boolean isValidAux(final TreeNode<T> node, TreeNode<T> minNode, TreeNode<T> maxNode) {
 
 	// your code here
-
-	return false;
+	if (node == null) {
+            return true; // an empty subtree is valid
+        }
+        if ((minNode != null && node.getCountedEntity().compareTo(minNode.getCountedEntity()) <= 0)
+                || (maxNode != null && node.getCountedEntity().compareTo(maxNode.getCountedEntity()) >= 0)) {
+            return false; // node violates bst properties
+        }
+        return isValidAux(node.getLeft(), minNode, node) // check left subtree
+                && isValidAux(node.getRight(), node, maxNode); // check right subtree
     }
 
     /**
@@ -110,8 +124,44 @@ public class BST<T extends Comparable<T>> {
     protected TreeNode<T> removeAux(TreeNode<T> node, final CountedEntity<T> countedEntity) {
 
 	// your code here
-
-	return null;
+	if (node == null) {
+            return null; // node not found, return null
+        }
+        int result = countedEntity.compareTo(node.getCountedEntity());
+        if (result < 0) {
+            node.setLeft(removeAux(node.getLeft(), countedEntity)); // search in left subtree
+        } else if (result > 0) {
+            node.setRight(removeAux(node.getRight(), countedEntity)); // search in right subtree
+        } else {
+            // node to be removed found
+            if (node.getLeft() == null) {
+                return node.getRight(); // return right child if left is null
+            } else if (node.getRight() == null) {
+                return node.getLeft(); // return left child if right is null
+            } else {
+                // node has two children, replace with in-order successor (smallest in right subtree)
+                TreeNode<T> successor = node.getRight();
+                TreeNode<T> parent = node;
+                
+                // find the smallest node in the right subtree
+                while (successor.getLeft() != null) {
+                    parent = successor;
+                    successor = successor.getLeft();
+                }
+                
+                // copy successor data to current node
+                node.getCountedEntity().setCount(successor.getCountedEntity().getCount());
+                
+                // delete the successor node
+                if (parent.getLeft() == successor) {
+                    parent.setLeft(successor.getRight());
+                } else {
+                    parent.setRight(successor.getRight());
+                }
+            }
+        }
+        node.updateHeight(); // update height after removal
+        return node;
     }
 
     /**
@@ -198,8 +248,7 @@ public class BST<T extends Comparable<T>> {
     public boolean isEmpty() {
 
 	// your code here
-
-	return false;
+	return this.root == null;
     }
 
     /**
@@ -270,7 +319,18 @@ public class BST<T extends Comparable<T>> {
     public CountedEntity<T> retrieve(final CountedEntity<T> key) {
 
 	// your code here
-
-	return null;
+	TreeNode<T> node = root;
+        while (node != null) {
+            comparisons++; // increment comparison count
+            int result = key.compareTo(node.getCountedEntity());
+            if (result == 0) {
+                return node.getCountedEntity(); // key found, return the entity
+            } else if (result < 0) {
+                node = node.getLeft(); // search in left subtree
+            } else {
+                node = node.getRight(); // search in right subtree
+            }
+        }
+        return null; // key not found
     }
 }
