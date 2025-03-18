@@ -36,29 +36,21 @@ public class AVL<T extends Comparable<T>> extends BST<T> {
     private TreeNode<T> rebalance(TreeNode<T> node) {
 
 	// your code here
-	// get the balance factor of the node
-        int balanceFactor = balance(node);
+	int balanceFactor = balance(node);
 
-        // if left heavy
-        if (balanceFactor > 1) {
-            // if left-right case
+        if (balanceFactor > 1) { 
             if (balance(node.getLeft()) < 0) {
-                node.setLeft(rotateLeft(node.getLeft()));
+                node.setLeft(rotateLeft(node.getLeft())); 
             }
-            // left-left case
-            node = rotateRight(node);
-        }
-        // if right heavy
-        else if (balanceFactor < -1) {
-            // if right-left case
+            node = rotateRight(node); 
+        } else if (balanceFactor < -1) { 
             if (balance(node.getRight()) > 0) {
-                node.setRight(rotateRight(node.getRight()));
+                node.setRight(rotateRight(node.getRight())); 
             }
-            // right-right case
-            node = rotateLeft(node);
+            node = rotateLeft(node); 
         }
-        // update the height of the node
-        node.updateHeight();
+
+        node.updateHeight(); 
         return node;
     }
 
@@ -74,7 +66,7 @@ public class AVL<T extends Comparable<T>> extends BST<T> {
 	// right child becomes the new root
         TreeNode<T> newRoot = node.getRight();
         // move the left subtree of new root to the right subtree of old root
-        node.setRight(newRoot.getRight());
+        node.setRight(newRoot.getLeft());
         // old root becomes the left child of new root
         newRoot.setLeft(node);
         // update heights
@@ -116,18 +108,22 @@ public class AVL<T extends Comparable<T>> extends BST<T> {
     protected TreeNode<T> insertAux(TreeNode<T> node, final CountedEntity<T> countedEntity) {
 
 	// your code here
-	// if node is null, create a new node
-        if (node == null) {
-            return new TreeNode<>(countedEntity);
-        }
-        // insert data into the left or right subtree
-        if (countedEntity.compareTo(node.getCountedEntity()) < 0) {
-            node.setLeft(insertAux(node.getLeft(), countedEntity));
-        } else {
-            node.setRight(insertAux(node.getRight(), countedEntity));
-        }
-        // rebalance the node
-        return rebalance(node);
+	if (node == null) {
+	     countedEntity.incrementCount(); // Ensure count starts at 1
+	     return new TreeNode<>(countedEntity);
+	}
+
+	int compare = countedEntity.compareTo(node.getCountedEntity());
+	if (compare < 0) {
+	    node.setLeft(insertAux(node.getLeft(), countedEntity));
+	} else if (compare > 0) {
+	    node.setRight(insertAux(node.getRight(), countedEntity));
+	} else {
+	    node.getCountedEntity().incrementCount();
+	}
+
+	node.updateHeight();
+	return rebalance(node);
     }
 
     /**
@@ -185,54 +181,29 @@ public class AVL<T extends Comparable<T>> extends BST<T> {
 
 	// your code here
 	if (node == null) {
-	        // if the node is null, there's nothing to remove
-	        return null;
-	    }
-
-	    // compare the data to the current node's data
-	    final int result = countedEntity.compareTo(node.getCountedEntity());
-
-	    if (result < 0) {
-	        // if data is less than the current node's data, go left
-	        node.setLeft(removeAux(node.getLeft(), countedEntity));
-	    } else if (result > 0) {
-	        // if data is greater than the current node's data, go right
-	        node.setRight(removeAux(node.getRight(), countedEntity));
-	    } else {
-	        // node to be removed found
-	        if (node.getLeft() == null) {
-	            // if the node has no left child, replace it with its right child
-	            return node.getRight();
-	        } else if (node.getRight() == null) {
-	            // if the node has no right child, replace it with its left child
-	            return node.getLeft();
-	        } else {
-	            // node with two children
-	            TreeNode<T> parent = node;
-	            TreeNode<T> successor = node.getRight();
-
-	            // find the in-order successor (smallest in the right subtree)
-	            while (successor.getLeft() != null) {
-	                parent = successor;
-	                successor = successor.getLeft();
-	            }
-
-	            // if the successor is not the immediate right child
-	            if (parent != node) {
-	                parent.setLeft(successor.getRight());
-	                successor.setRight(node.getRight());
-	            }
-
-	            // replace node with successor
-	            successor.setLeft(node.getLeft());
-	            node = successor;
-	        }
-	    }
-
-	    // update the height of the current node
-	    node.updateHeight();
-	    // rebalance the current node
-	    return rebalance(node);
+            return null;
+        }
+        int result = countedEntity.compareTo(node.getCountedEntity());
+        if (result < 0) {
+            node.setLeft(removeAux(node.getLeft(), countedEntity));
+        } else if (result > 0) {
+            node.setRight(removeAux(node.getRight(), countedEntity));
+        } else {
+            if (node.getLeft() == null) {
+                return node.getRight();
+            } else if (node.getRight() == null) {
+                return node.getLeft();
+            } else {
+                TreeNode<T> successor = node.getRight();
+                while (successor.getLeft() != null) {
+                    successor = successor.getLeft();
+                }
+                node.getCountedEntity().setCount(successor.getCountedEntity().getCount());
+                node.setRight(removeAux(node.getRight(), successor.getCountedEntity()));
+            }
+        }
+        node.updateHeight(); // ensure height updates correctly
+        return rebalance(node);
     }
 
 }

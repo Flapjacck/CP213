@@ -28,7 +28,7 @@ public class A04Main {
     /**
      * The default test file name.
      */
-    public static final String FILENAME = "otoos610.txt";
+    public static final String FILENAME = "decline.txt";
     /**
      * A NumberFormat object.
      */

@@ -23,24 +23,30 @@ public class PopularityTree<T extends Comparable<T>> extends BST<T> {
 
 	// your code here
 	if (node == null) {
-            return null; // node not found
+            return null; // Node not found
         }
+        
         int result = key.compareTo(node.getCountedEntity());
         if (result == 0) {
-            node.getCountedEntity().incrementCount(); // increase count
+            node.getCountedEntity().incrementCount(); // Increase count on access
 
-            // perform rotations to maintain popularity order
-            if (node.getLeft() != null && node.getLeft().getCountedEntity().getCount() > node.getCountedEntity().getCount()) {
-                node = rotateRight(node); // rotate right if left child has higher count
-            } else if (node.getRight() != null && node.getRight().getCountedEntity().getCount() > node.getCountedEntity().getCount()) {
-                node = rotateLeft(node); // rotate left if right child has higher count
+            // Perform rotations to move frequently accessed nodes upwards
+            while (node.getLeft() != null && node.getLeft().getCountedEntity().getCount() > node.getCountedEntity().getCount()) {
+                node = rotateRight(node);
             }
+            while (node.getRight() != null && node.getRight().getCountedEntity().getCount() > node.getCountedEntity().getCount()) {
+                node = rotateLeft(node);
+            }
+            node.updateHeight(); // Ensure correct height
             return node;
         } else if (result < 0) {
-            node.setLeft(retrieveAux(node.getLeft(), key)); // search left subtree
+            node.setLeft(retrieveAux(node.getLeft(), key)); // Search left subtree
+            node = rotateRight(node); // Fix ordering after retrieval
         } else {
-            node.setRight(retrieveAux(node.getRight(), key)); // search right subtree
+            node.setRight(retrieveAux(node.getRight(), key)); // Search right subtree
+            node = rotateLeft(node); // Fix ordering after retrieval
         }
+        node.updateHeight(); // Update height correctly
         return node;
     }
 
@@ -54,8 +60,10 @@ public class PopularityTree<T extends Comparable<T>> extends BST<T> {
 
 	// your code here
 	TreeNode<T> newRoot = parent.getRight();
-        parent.setRight(newRoot.getLeft());
+	parent.setRight(newRoot.getLeft());
         newRoot.setLeft(parent);
+        parent.updateHeight();
+        newRoot.updateHeight();
         return newRoot;
     }
 
@@ -69,8 +77,10 @@ public class PopularityTree<T extends Comparable<T>> extends BST<T> {
 
 	// your code here
 	TreeNode<T> newRoot = parent.getLeft();
-        parent.setLeft(newRoot.getRight());
+	parent.setLeft(newRoot.getRight());
         newRoot.setRight(parent);
+        parent.updateHeight();
+        newRoot.updateHeight();
         return newRoot;
     }
 
@@ -83,14 +93,15 @@ public class PopularityTree<T extends Comparable<T>> extends BST<T> {
 
 	// your code here
 	if (node == null) {
-            return new TreeNode<>(data); // create new node
+            return new TreeNode<>(data); // Create new node
         }
         int result = data.compareTo(node.getCountedEntity());
         if (result < 0) {
-            node.setLeft(insertAux(node.getLeft(), data)); // insert left
+            node.setLeft(insertAux(node.getLeft(), data)); // Insert left
         } else if (result > 0) {
-            node.setRight(insertAux(node.getRight(), data)); // insert right
+            node.setRight(insertAux(node.getRight(), data)); // Insert right
         }
+        node.updateHeight(); // Ensure correct height update
         return node;
     }
 
@@ -108,15 +119,15 @@ public class PopularityTree<T extends Comparable<T>> extends BST<T> {
 
 	// your code here
 	if (node == null) {
-            return true; // empty tree is valid
+            return true; // Empty tree is valid
         }
         if ((minNode != null && node.getCountedEntity().compareTo(minNode.getCountedEntity()) <= 0)
                 || (maxNode != null && node.getCountedEntity().compareTo(maxNode.getCountedEntity()) >= 0)) {
-            return false; // violates BST properties
+            return false; // Violates BST properties
         }
         if ((node.getLeft() != null && node.getLeft().getCountedEntity().getCount() > node.getCountedEntity().getCount())
                 || (node.getRight() != null && node.getRight().getCountedEntity().getCount() > node.getCountedEntity().getCount())) {
-            return false; // parent must have higher or equal count than children
+            return false; // Parent must have higher or equal count than children
         }
         return isValidAux(node.getLeft(), minNode, node) && isValidAux(node.getRight(), node, maxNode);
     }
