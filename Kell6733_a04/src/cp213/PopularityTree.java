@@ -22,8 +22,26 @@ public class PopularityTree<T extends Comparable<T>> extends BST<T> {
     private TreeNode<T> retrieveAux(TreeNode<T> node, final CountedEntity<T> key) {
 
 	// your code here
+	if (node == null) {
+            return null; // node not found
+        }
+        int result = key.compareTo(node.getCountedEntity());
+        if (result == 0) {
+            node.getCountedEntity().incrementCount(); // increase count
 
-	return null;
+            // perform rotations to maintain popularity order
+            if (node.getLeft() != null && node.getLeft().getCountedEntity().getCount() > node.getCountedEntity().getCount()) {
+                node = rotateRight(node); // rotate right if left child has higher count
+            } else if (node.getRight() != null && node.getRight().getCountedEntity().getCount() > node.getCountedEntity().getCount()) {
+                node = rotateLeft(node); // rotate left if right child has higher count
+            }
+            return node;
+        } else if (result < 0) {
+            node.setLeft(retrieveAux(node.getLeft(), key)); // search left subtree
+        } else {
+            node.setRight(retrieveAux(node.getRight(), key)); // search right subtree
+        }
+        return node;
     }
 
     /**
@@ -35,8 +53,10 @@ public class PopularityTree<T extends Comparable<T>> extends BST<T> {
     private TreeNode<T> rotateLeft(final TreeNode<T> parent) {
 
 	// your code here
-
-	return null;
+	TreeNode<T> newRoot = parent.getRight();
+        parent.setRight(newRoot.getLeft());
+        newRoot.setLeft(parent);
+        return newRoot;
     }
 
     /**
@@ -48,8 +68,10 @@ public class PopularityTree<T extends Comparable<T>> extends BST<T> {
     private TreeNode<T> rotateRight(final TreeNode<T> parent) {
 
 	// your code here
-
-	return null;
+	TreeNode<T> newRoot = parent.getLeft();
+        parent.setLeft(newRoot.getRight());
+        newRoot.setRight(parent);
+        return newRoot;
     }
 
     /**
@@ -60,8 +82,16 @@ public class PopularityTree<T extends Comparable<T>> extends BST<T> {
     protected TreeNode<T> insertAux(TreeNode<T> node, final CountedEntity<T> data) {
 
 	// your code here
-
-	return null;
+	if (node == null) {
+            return new TreeNode<>(data); // create new node
+        }
+        int result = data.compareTo(node.getCountedEntity());
+        if (result < 0) {
+            node.setLeft(insertAux(node.getLeft(), data)); // insert left
+        } else if (result > 0) {
+            node.setRight(insertAux(node.getRight(), data)); // insert right
+        }
+        return node;
     }
 
     /**
@@ -77,8 +107,18 @@ public class PopularityTree<T extends Comparable<T>> extends BST<T> {
     protected boolean isValidAux(final TreeNode<T> node, TreeNode<T> minNode, TreeNode<T> maxNode) {
 
 	// your code here
-
-	return false;
+	if (node == null) {
+            return true; // empty tree is valid
+        }
+        if ((minNode != null && node.getCountedEntity().compareTo(minNode.getCountedEntity()) <= 0)
+                || (maxNode != null && node.getCountedEntity().compareTo(maxNode.getCountedEntity()) >= 0)) {
+            return false; // violates BST properties
+        }
+        if ((node.getLeft() != null && node.getLeft().getCountedEntity().getCount() > node.getCountedEntity().getCount())
+                || (node.getRight() != null && node.getRight().getCountedEntity().getCount() > node.getCountedEntity().getCount())) {
+            return false; // parent must have higher or equal count than children
+        }
+        return isValidAux(node.getLeft(), minNode, node) && isValidAux(node.getRight(), node, maxNode);
     }
 
     /**
@@ -102,8 +142,8 @@ public class PopularityTree<T extends Comparable<T>> extends BST<T> {
     public CountedEntity<T> retrieve(CountedEntity<T> key) {
 
 	// your code here
-
-	return null;
+	root = retrieveAux(root, key);
+        return (root != null) ? root.getCountedEntity() : null;
     }
 
 }
