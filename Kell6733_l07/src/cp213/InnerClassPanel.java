@@ -61,6 +61,17 @@ public class InnerClassPanel extends JPanel {
 	public void itemStateChanged(final ItemEvent e) {
 
 	    // your code here
+	    // get the source of the event
+            JCheckBox source = (JCheckBox) e.getSource();
+            // if checked, add to list
+            if (e.getStateChange() == ItemEvent.SELECTED) {
+                checkBoxesSelected.add(source.getText());
+            } else { // if unchecked, remove from list
+                checkBoxesSelected.remove(source.getText());
+            }
+            // update label and print to console
+            label.setText(CheckBoxesSelectedToString());
+            System.out.println(CheckBoxesSelectedToString());
 
 	}
     }
@@ -74,6 +85,13 @@ public class InnerClassPanel extends JPanel {
 	public void actionPerformed(final ActionEvent e) {
 
 	    // your code here
+	    // get the selected radio button
+            JRadioButton source = (JRadioButton) e.getSource();
+            // store the selected button text
+            radioButtonSet = source.getText();
+            // update label and print to console
+            label.setText(radioButtonSet);
+            System.out.println(radioButtonSet);
 
 	}
     }
@@ -91,6 +109,11 @@ public class InnerClassPanel extends JPanel {
 		// Verifies that the slider has stopped moving.
 
 		// your code here
+		// store slider value
+                sliderSet = source.getValue();
+                // update label and print to console
+                label.setText("Slider Value: " + sliderSet);
+                System.out.println("Slider Value: " + sliderSet);
 
 	    }
 	}
@@ -105,6 +128,11 @@ public class InnerClassPanel extends JPanel {
 	public void stateChanged(final ChangeEvent e) {
 
 	    // your code here
+	    // store the new value from spinner
+            spinnerSet = spinner.getValue().toString();
+            // update label and print to console
+            label.setText("Spinner Value: " + spinnerSet);
+            System.out.println("Spinner Value: " + spinnerSet);
 
 	}
     }
@@ -118,6 +146,11 @@ public class InnerClassPanel extends JPanel {
 	public void actionPerformed(final ActionEvent e) {
 
 	    // your code here
+	    // store the text entered in the field
+            textEntry = textField.getText();
+            // update label and print to console
+            label.setText("Text: " + textEntry);
+            System.out.println("Text: " + textEntry);
 
 	}
     }
@@ -199,6 +232,19 @@ public class InnerClassPanel extends JPanel {
 	this.button.addActionListener(new ButtonListener());
 
 	// your code here
+	// attach check box listeners
+        this.mustard.addItemListener(new CheckBoxListener());
+        this.onions.addItemListener(new CheckBoxListener());
+        this.ketchup.addItemListener(new CheckBoxListener());
+        // attach radio button listeners
+        this.starTrek.addActionListener(new RadioButtonListener());
+        this.starWars.addActionListener(new RadioButtonListener());
+        // attach slider listener
+        this.slider.addChangeListener(new SliderListener());
+        // attach spinner listener
+        this.spinner.addChangeListener(new SpinnerListener());
+        // attach text field listener
+        this.textField.addActionListener(new TextFieldListener());
 
     }
 
