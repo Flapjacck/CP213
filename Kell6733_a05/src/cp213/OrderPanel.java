@@ -1,7 +1,9 @@
 package cp213;
 
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.text.DecimalFormat;
 
@@ -31,6 +33,17 @@ public class OrderPanel extends JPanel {
 	public void actionPerformed(final ActionEvent e) {
 
 	    // your code here
+	    try {
+                // Trigger system print dialog
+                java.awt.print.PrinterJob job = java.awt.print.PrinterJob.getPrinterJob();
+                job.setPrintable(order);
+                if (job.printDialog()) {
+                    job.print(); // Actually print
+                }
+            } catch (Exception ex) {
+                // Suppress error output (no JOptionPane)
+                System.out.println("Printing failed: " + ex.getMessage());
+            }
 
 	}
     }
@@ -50,6 +63,35 @@ public class OrderPanel extends JPanel {
 	}
 
 	// your code here
+	@Override
+        public void focusGained(FocusEvent e) {
+            // Nothing needed when focused
+        }
+
+        @Override
+        public void focusLost(FocusEvent e) {
+            JTextField field = (JTextField) e.getSource();
+            String input = field.getText();
+            int quantity = 0;
+
+            try {
+                quantity = Integer.parseInt(input);
+                if (quantity < 0) {
+                    quantity = 0;
+                }
+            } catch (NumberFormatException ex) {
+                quantity = 0;
+            }
+
+            // Update order and text field
+            order.update(item, quantity);
+            field.setText(String.valueOf(quantity));
+
+            // Update totals
+            subtotalLabel.setText(priceFormat.format(order.getSubTotal()));
+            taxLabel.setText(priceFormat.format(order.getTaxes()));
+            totalLabel.setText(priceFormat.format(order.getTotal()));
+        }
 
     }
 
@@ -87,6 +129,47 @@ public class OrderPanel extends JPanel {
     private void layoutView() {
 
 	// your code here
+	GridLayout gLayout = new GridLayout(menu.size() + 5, 3);
+	setLayout(gLayout);
+
+	JLabel itemHeading = new JLabel("Item");
+	JLabel priceHeading = new JLabel("Price");
+	JLabel quantityHeading = new JLabel("Quantity");
+
+	this.add(itemHeading);
+	this.add(priceHeading);
+	this.add(quantityHeading);
+
+	for (int i = 0; i < menu.size(); i++) {
+	    MenuItem item = menu.getItem(i);
+	    nameLabels[i] = new JLabel(item.getEntity());
+	    priceLabels[i] = new JLabel(item.getAmount().toString());
+	    quantityFields[i] = new JTextField("0", 5);
+
+	    this.add(nameLabels[i]);
+	    this.add(priceLabels[i]);
+	    this.add(quantityFields[i]);
+
+	}
+
+	JLabel subtotalHeading = new JLabel("Subtotal:");
+	JLabel taxHeading = new JLabel("Tax:");
+	JLabel totalHeading = new JLabel("Total:");
+
+	this.add(subtotalHeading);
+	this.add(new JLabel(""));
+	this.add(subtotalLabel);
+	this.add(taxHeading);
+	this.add(new JLabel(""));
+	this.add(taxLabel);
+	this.add(totalHeading);
+	this.add(new JLabel(""));
+	this.add(totalLabel);
+	this.add(new JLabel(""));
+	this.add(printButton);
+
+	this.setVisible(true);
+
 
     }
 
@@ -98,6 +181,15 @@ public class OrderPanel extends JPanel {
 	this.printButton.addActionListener(new PrintListener());
 
 	// your code here
+	// Register the PrinterListener with the print button.
+	this.printButton.addActionListener(new PrintListener());
+
+	// your code here
+	for (int i = 0; i < menu.size(); i++) {
+	    MenuItem item = menu.getItem(i);
+	    quantityFields[i].addFocusListener(new QuantityListener(item));
+	}
+
 
     }
 }

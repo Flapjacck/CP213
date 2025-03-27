@@ -7,6 +7,8 @@ import java.awt.print.PageFormat;
 import java.awt.print.Printable;
 import java.awt.print.PrinterException;
 import java.math.BigDecimal;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Stores a HashMap of MenuItem objects and the quantity of each MenuItem
@@ -32,7 +34,8 @@ public class Order implements Printable {
     // https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Map.html
 
     // your code here
-
+    private final Map<MenuItem, Integer> items = new HashMap<>();
+    
     /**
      * Increments the quantity of a particular MenuItem in an Order with a new
      * quantity. If the MenuItem is not in the order, it is added.
@@ -43,6 +46,10 @@ public class Order implements Printable {
     public void add(final MenuItem item, final int quantity) {
 
 	// your code here
+	if (quantity > 0) {
+            int current = items.getOrDefault(item, 0);
+            items.put(item, current + quantity);
+        }
 
     }
 
@@ -55,8 +62,19 @@ public class Order implements Printable {
     public BigDecimal getSubTotal() {
 
 	// your code here
+	BigDecimal subtotal = BigDecimal.ZERO;
 
-	return null;
+        // Loop over each entry in the order
+        for (Map.Entry<MenuItem, Integer> entry : items.entrySet()) {
+            BigDecimal price = entry.getKey().getAmount();  // Price of item
+            int quantity = entry.getValue();                // Quantity ordered
+
+            // Add price * quantity to subtotal
+            subtotal = subtotal.add(price.multiply(BigDecimal.valueOf(quantity)));
+        }
+
+        // Set to 2 decimal places
+        return subtotal;
     }
 
     /**
@@ -68,8 +86,8 @@ public class Order implements Printable {
     public BigDecimal getTaxes() {
 
 	// your code here
-
-	return null;
+	BigDecimal taxes = getSubTotal().multiply(TAX_RATE);
+        return taxes;
     }
 
     /**
@@ -80,8 +98,8 @@ public class Order implements Printable {
     public BigDecimal getTotal() {
 
 	// your code here
-
-	return null;
+	BigDecimal total = getSubTotal().add(getTaxes());
+	return total;
     }
 
     /*
@@ -119,8 +137,25 @@ public class Order implements Printable {
     public String toString() {
 
 	// your code here
+	StringBuilder sb = new StringBuilder();
 
-	return null;
+        // Print each item in the order
+        for (Map.Entry<MenuItem, Integer> entry : items.entrySet()) {
+            MenuItem item = entry.getKey();
+            int quantity = entry.getValue();
+            BigDecimal price = item.getAmount();
+            BigDecimal lineTotal = price.multiply(BigDecimal.valueOf(quantity));
+
+            sb.append(String.format(lineFormat, item.getEntity(), quantity, price, lineTotal));
+        }
+
+        // Add subtotal, tax, and total lines
+        sb.append("\n");
+        sb.append(String.format(totalFormat, "Subtotal:", getSubTotal()));
+        sb.append(String.format(totalFormat, "Taxes:", getTaxes()));
+        sb.append(String.format(totalFormat, "Total:", getTotal()));
+
+        return sb.toString();
     }
 
     /**
@@ -134,6 +169,11 @@ public class Order implements Printable {
     public void update(final MenuItem item, final int quantity) {
 
 	// your code here
+	if (quantity <= 0) {
+            items.remove(item);
+        } else {
+            items.put(item, quantity);
+        }
 
     }
 }

@@ -63,7 +63,43 @@ public class Cashier {
 	System.out.println("Welcome to WLU Foodorama!");
 
 	// your code here
+	Order order = new Order();
+        Scanner scan = new Scanner(System.in);
 
-	return null;
+        printCommands(); // Show menu once at start
+
+        while (true) {
+            System.out.print("Command: ");
+            String input = scan.nextLine();
+
+            try {
+                int command = Integer.parseInt(input); // Try reading input as a number
+
+                if (command == 0) {
+                    break; // End order
+                } else if (command >= 1 && command <= menu.size()) {
+                    // Valid item number
+                    int quantity = askForQuantity(scan);
+                    if (quantity > 0) {
+                        order.add(menu.getItem(command - 1), quantity);
+                    }
+                } else {
+                    // Invalid number range
+                    printCommands();
+                }
+            } catch (NumberFormatException e) {
+                // Non-numeric input
+                System.out.println("Not a valid number");
+                printCommands();
+            }
+        }
+
+        // Print final receipt
+        System.out.println("----------------------------------------");
+        System.out.println("Receipt");
+        System.out.println(order);
+
+        return order;
+	
     }
 }
